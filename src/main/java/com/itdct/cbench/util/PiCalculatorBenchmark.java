@@ -12,17 +12,20 @@ import java.math.MathContext;
 public class PiCalculatorBenchmark {
     private static final BigDecimal TWO = new BigDecimal("2");
     private static final BigDecimal FOUR = new BigDecimal("4");
-    public static void main(String[] args) {
-        long startTime = System.currentTimeMillis();
-        int iterations = 10000; // 迭代次数
-        int precision = 500; // 精度设置为 50 位
-        MathContext mc = new MathContext(precision); // 设置精度
 
-        BigDecimal pi = calculatePi(iterations, mc);
-        long endTime = System.currentTimeMillis();
-        System.out.println("使用时间："+ (endTime - startTime) + "ms");
-        System.out.println("Estimated value of Pi after " + iterations + " iterations is " + pi.toPlainString());
-    }
+    private boolean needStop = false;
+
+//    public static void main(String[] args) {
+//        long startTime = System.currentTimeMillis();
+//        int iterations = 10000; // 迭代次数
+//        int precision = 500; // 精度设置为 50 位
+//        MathContext mc = new MathContext(precision); // 设置精度
+//
+//        BigDecimal pi = calculatePi(iterations, mc);
+//        long endTime = System.currentTimeMillis();
+//        System.out.println("使用时间："+ (endTime - startTime) + "ms");
+//        System.out.println("Estimated value of Pi after " + iterations + " iterations is " + pi.toPlainString());
+//    }
 
     /**
      * 使用高斯-勒让德算法计算 Pi 的值。
@@ -31,13 +34,16 @@ public class PiCalculatorBenchmark {
      * @param mc         MathContext 对象，用于设置精度
      * @return 计算出的 Pi 值
      */
-    public static BigDecimal calculatePi(int iterations, MathContext mc) {
+    public boolean calculatePi(int iterations, MathContext mc) {
         BigDecimal a = BigDecimal.ONE; // 初始化 a
         BigDecimal b = BigDecimal.ONE.divide(sqrt(BigDecimal.valueOf(2), mc), mc); // 初始化 b
         BigDecimal t = BigDecimal.ONE.divide(BigDecimal.valueOf(4), mc); // 初始化 t
         BigDecimal p = BigDecimal.ONE; // 初始化 p
 
         for (int i = 0; i < iterations; i++) {
+            if (needStop) {
+                return false;
+            }
             BigDecimal aNew = a.add(b).divide(TWO, mc);
             BigDecimal bNew = sqrt(a.multiply(b), mc);
             BigDecimal tNew = t.subtract(p.multiply(a.subtract(aNew).pow(2)), mc);
@@ -50,8 +56,8 @@ public class PiCalculatorBenchmark {
         }
 
         BigDecimal piEstimate = a.add(b).pow(2).divide(FOUR.multiply(t), mc);
-
-        return piEstimate;
+        return true;
+//        return piEstimate;
     }
 
     /**
@@ -71,5 +77,14 @@ public class PiCalculatorBenchmark {
         }
 
         return result;
+    }
+
+    public boolean isNeedStop() {
+        return needStop;
+    }
+
+    public PiCalculatorBenchmark setNeedStop(boolean needStop) {
+        this.needStop = needStop;
+        return this;
     }
 }
