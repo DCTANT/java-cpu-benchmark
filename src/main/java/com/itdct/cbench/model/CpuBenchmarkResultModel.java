@@ -16,11 +16,10 @@ public class CpuBenchmarkResultModel {
      */
     private CpuInfoModel cpuInfoModel;
 
-    private List<CpuLoopResultModel> cpuLoopResultModels=new ArrayList<>();
-    private HashMap<Integer, Integer> totalThreadResultMap = new HashMap<>();
-
     private double singleThreadScore;
     private double totalThreadScore;
+
+    private double multipleThreadRatio;
 
     public CpuInfoModel getCpuInfoModel() {
         return cpuInfoModel;
@@ -28,24 +27,6 @@ public class CpuBenchmarkResultModel {
 
     public CpuBenchmarkResultModel setCpuInfoModel(CpuInfoModel cpuInfoModel) {
         this.cpuInfoModel = cpuInfoModel;
-        return this;
-    }
-
-    public List<CpuLoopResultModel> getCpuLoopResultModels() {
-        return cpuLoopResultModels;
-    }
-
-    public CpuBenchmarkResultModel setCpuLoopResultModels(List<CpuLoopResultModel> cpuLoopResultModels) {
-        this.cpuLoopResultModels = cpuLoopResultModels;
-        return this;
-    }
-
-    public HashMap<Integer, Integer> getTotalThreadResultMap() {
-        return totalThreadResultMap;
-    }
-
-    public CpuBenchmarkResultModel setTotalThreadResultMap(HashMap<Integer, Integer> totalThreadResultMap) {
-        this.totalThreadResultMap = totalThreadResultMap;
         return this;
     }
 
@@ -64,6 +45,15 @@ public class CpuBenchmarkResultModel {
 
     public CpuBenchmarkResultModel setTotalThreadScore(double totalThreadScore) {
         this.totalThreadScore = totalThreadScore;
+        return this;
+    }
+
+    public double getMultipleThreadRatio() {
+        return multipleThreadRatio;
+    }
+
+    public CpuBenchmarkResultModel setMultipleThreadRatio(double multipleThreadRatio) {
+        this.multipleThreadRatio = multipleThreadRatio;
         return this;
     }
 }
