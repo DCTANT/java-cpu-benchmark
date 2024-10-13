@@ -19,6 +19,7 @@ public class GetCpuInfo {
         String osName = System.getProperty("os.name").toLowerCase();
         System.out.println("当前系统名称为：" + osName);
 
+        // TODO: Zhouwx: 2024/10/14 Termux获取手机型号
         if (osName.contains("linux")) {
             try {
                 cpuInfoModel.setCpuModelName(getLinuxCpuInfo("model name"));

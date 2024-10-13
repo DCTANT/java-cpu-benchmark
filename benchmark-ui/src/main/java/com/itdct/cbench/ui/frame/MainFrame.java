@@ -9,18 +9,27 @@ package com.itdct.cbench.ui.frame;
 
 import com.itdct.cbench.core.Benchmark;
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
+import com.itdct.cbench.ui.dialog.AboutDialog;
 import com.itdct.cbench.util.CpuBenchmarkResultUtil;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -35,10 +44,17 @@ public class MainFrame extends JFrame {
     private JButton stopButton;
     private JScrollPane scrollPane;
 
+    private MainFrame context;
+    private AboutDialog aboutDialog;
+    private CpuBenchmarkResultModel cpuBenchmarkResultModel;
+
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+
     public MainFrame() {
+        context = this;
         // 设置窗口默认关闭操作
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("DCT的CPU性能测试工具");
+        setTitle("Java版CPU性能测试工具——By DecentAnt");
 
         createMenuBar();
 
@@ -96,7 +112,7 @@ public class MainFrame extends JFrame {
 
             Thread thread = new Thread(() -> {
                 benchmark.setOnPrint(s -> textArea.append(s + "\n"));
-                CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
+                cpuBenchmarkResultModel = benchmark.benchmark();
 
                 if (cpuBenchmarkResultModel.isAbort()) {
                     textArea.setText("CPU测试被终止……");
@@ -168,6 +184,53 @@ public class MainFrame extends JFrame {
         JMenu helpMenu = new JMenu("帮助");
         JMenuItem aboutItem = new JMenuItem("关于软件");
         helpMenu.add(aboutItem);
+
+        exportItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cpuBenchmarkResultModel == null || cpuBenchmarkResultModel.isAbort()) {
+                    JOptionPane.showMessageDialog(context,
+                            "CPU测试未执行，无法导出",
+                            "无法导出",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                JFileChooser fileChooser = new JFileChooser();
+                // 设置文件保存对话框模式
+                fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+                // 设置默认文件名
+                fileChooser.setSelectedFile(new File("CPU性能测试结果-" + dateFormat.format(System.currentTimeMillis()) + ".txt"));
+
+                int result = fileChooser.showSaveDialog(context);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    try {
+                        // 导出文件的逻辑
+                        String content = CpuBenchmarkResultUtil.getCpuBenchmarkResult(cpuBenchmarkResultModel);
+                        Files.write(selectedFile.toPath(), content.getBytes());
+                        JOptionPane.showMessageDialog(context,
+                                "文件已成功导出到: " + selectedFile.getAbsolutePath(),
+                                "导出成功",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(context,
+                                "文件导出失败: " + ex.getMessage(),
+                                "导出失败",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
+        aboutItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (aboutDialog == null || !aboutDialog.isVisible()) {
+                    aboutDialog = new AboutDialog(context, "关于本软件");
+                }
+            }
+        });
 
         // 将菜单添加到菜单栏中
         menuBar.add(fileMenu);
