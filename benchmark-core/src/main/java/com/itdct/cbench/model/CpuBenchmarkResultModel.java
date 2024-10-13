@@ -39,6 +39,11 @@ public class CpuBenchmarkResultModel {
      */
     private double multipleThreadRatio;
 
+    /**
+     * 是否强行停止
+     */
+    private boolean abort;
+
     public CpuInfoModel getCpuInfoModel() {
         return cpuInfoModel;
     }
@@ -90,6 +95,15 @@ public class CpuBenchmarkResultModel {
 
     public CpuBenchmarkResultModel setTotalThreadResultModels(List<SingleThreadResultModel> totalThreadResultModels) {
         this.totalThreadResultModels = totalThreadResultModels;
+        return this;
+    }
+
+    public boolean isAbort() {
+        return abort;
+    }
+
+    public CpuBenchmarkResultModel setAbort(boolean abort) {
+        this.abort = abort;
         return this;
     }
 }

@@ -22,6 +22,11 @@ public class SingleThreadResultModel {
      */
     private int finalIterations;
 
+    /**
+     * 是否是强行终止的
+     */
+    private boolean abort = false;
+
     public double getScore() {
         return score;
     }
@@ -46,6 +51,15 @@ public class SingleThreadResultModel {
 
     public SingleThreadResultModel setFinalIterations(int finalIterations) {
         this.finalIterations = finalIterations;
+        return this;
+    }
+
+    public boolean isAbort() {
+        return abort;
+    }
+
+    public SingleThreadResultModel setAbort(boolean abort) {
+        this.abort = abort;
         return this;
     }
 }

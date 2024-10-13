@@ -42,6 +42,9 @@ public class Main {
                 // 测试CPU性能
                 Benchmark benchmark = new Benchmark();
                 CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
+                if (cpuBenchmarkResultModel == null) {
+                    return;
+                }
                 CpuInfoModel cpuInfoModel = cpuBenchmarkResultModel.getCpuInfoModel();
                 System.out.println(cpuInfoModel);
 

@@ -9,6 +9,7 @@
     </parent>
 
     <artifactId>benchmark-cli</artifactId>
+    <description>无UI界面的CPU测试工具，适用于Linux等没有界面的平台</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

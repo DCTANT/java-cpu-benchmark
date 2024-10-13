@@ -2,17 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.itdct.cbench</groupId>
+        <artifactId>CpuBenchmark</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
 
-    <groupId>com.itdct.cbench</groupId>
-    <artifactId>CpuBenchmark</artifactId>
-    <version>1.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>benchmark-core</module>
-        <module>benchmark-cli</module>
-        <module>benchmark-ui</module>
-    </modules>
+    <artifactId>benchmark-ui</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -21,7 +17,11 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.itdct.cbench</groupId>
+            <artifactId>benchmark-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

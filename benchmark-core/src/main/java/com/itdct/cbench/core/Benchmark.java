@@ -21,9 +21,18 @@ import java.util.Vector;
  */
 public class Benchmark {
     private int totalBenchmarkTime = 10000;
+    private boolean start = false;
+
+    private boolean forceStop = false;
+    private CpuBenchmarkResultModel cpuBenchmarkResultModel;
 
     public CpuBenchmarkResultModel benchmark() {
-        CpuBenchmarkResultModel cpuBenchmarkResultModel = new CpuBenchmarkResultModel();
+        if (start) {
+            System.out.println("正在运行中，无法重复开始");
+            return null;
+        }
+        cpuBenchmarkResultModel = new CpuBenchmarkResultModel();
+        start = true;
         GetCpuInfo getCpuInfo = new GetCpuInfo();
         CpuInfoModel cpuInfoModel = getCpuInfo.getCpuInfo();
         cpuBenchmarkResultModel.setCpuInfoModel(cpuInfoModel);
@@ -42,7 +51,7 @@ public class Benchmark {
         double totalScore = 0.0;
         for (SingleThreadResultModel threadResultModel : singleThreadResultModels) {
             double score = threadResultModel.getScore();
-            totalScore+= score;
+            totalScore += score;
         }
         double resultTotalScore = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
@@ -51,6 +60,8 @@ public class Benchmark {
         double ratio = resultTotalScore / singleThreadResultModel.getScore();
         cpuBenchmarkResultModel.setMultipleThreadRatio(new BigDecimal(ratio).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
+        start = false;
+        forceStop = false;
         return cpuBenchmarkResultModel;
     }
 
@@ -77,16 +88,24 @@ public class Benchmark {
         }
         return totalResultModels;
     }
+
     public SingleThreadResultModel singleThreadBenchmark() {
         SingleThreadResultModel singleThreadResultModel = new SingleThreadResultModel();
         long programStartTime = System.currentTimeMillis();
         PiCalculatorBenchmark piCalculatorBenchmark = new PiCalculatorBenchmark();
 
-        List<CpuLoopResultModel> cpuLoopResultModels=new ArrayList<>();
+        List<CpuLoopResultModel> cpuLoopResultModels = new ArrayList<>();
+        final boolean[] stopByForce = {false};
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
+                    if (forceStop) {
+                        piCalculatorBenchmark.setNeedStop(true);
+                        stopByForce[0] = true;
+                        break;
+                    }
+
                     long nowTime = System.currentTimeMillis();
                     if (nowTime - programStartTime > totalBenchmarkTime) {
                         piCalculatorBenchmark.setNeedStop(true);
@@ -133,15 +152,28 @@ public class Benchmark {
             iterations = (int) (iterations * 1.1);
         }
 
-        double totalScore = 0.0;
-        for (CpuLoopResultModel cpuLoopResultModel : cpuLoopResultModels) {
-            double score = cpuLoopResultModel.getScore();
-            totalScore += score;
-        }
+        if (stopByForce[0]) {
+            // INFO: Zhouwx: 2024/10/13 如果是强行停止的，需要设置状态
+            singleThreadResultModel.setAbort(true);
+        } else {
+            singleThreadResultModel.setAbort(false);
+            double totalScore = 0.0;
+            for (CpuLoopResultModel cpuLoopResultModel : cpuLoopResultModels) {
+                double score = cpuLoopResultModel.getScore();
+                totalScore += score;
+            }
 
-        double resultScore = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        singleThreadResultModel.setScore(resultScore);
-//        System.out.println("总计耗时：" + (System.currentTimeMillis() - programStartTime));
+            double resultScore = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            singleThreadResultModel.setScore(resultScore);
+        }
         return singleThreadResultModel;
+    }
+
+    public void abort() {
+        if (!start) {
+            return;
+        }
+        forceStop = true;
+        cpuBenchmarkResultModel.setAbort(true);
     }
 }
