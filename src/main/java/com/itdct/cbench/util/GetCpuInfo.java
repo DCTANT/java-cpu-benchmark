@@ -73,13 +73,6 @@ public class GetCpuInfo {
         return totalCount;
     }
 
-    public static void main(String[] args) {
-        String modelName = getLinuxCpuInfo("cpu cores");
-        System.out.println(modelName);
-//        int logicProcessorNum = getLogicProcessorNum();
-//        System.out.println(logicProcessorNum);
-    }
-
     private static String getWindowsCpuInfo(String type) {
         try {
             Process process = Runtime.getRuntime().exec("wmic cpu get " + type);

@@ -144,10 +144,4 @@ public class Benchmark {
 //        System.out.println("总计耗时：" + (System.currentTimeMillis() - programStartTime));
         return singleThreadResultModel;
     }
-
-    public static void main(String[] args) {
-        Benchmark benchmark = new Benchmark();
-        benchmark.benchmark();
-    }
-
 }

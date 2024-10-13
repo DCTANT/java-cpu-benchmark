@@ -15,18 +15,6 @@ public class PiCalculatorBenchmark {
 
     private boolean needStop = false;
 
-//    public static void main(String[] args) {
-//        long startTime = System.currentTimeMillis();
-//        int iterations = 10000; // 迭代次数
-//        int precision = 500; // 精度设置为 50 位
-//        MathContext mc = new MathContext(precision); // 设置精度
-//
-//        BigDecimal pi = calculatePi(iterations, mc);
-//        long endTime = System.currentTimeMillis();
-//        System.out.println("使用时间："+ (endTime - startTime) + "ms");
-//        System.out.println("Estimated value of Pi after " + iterations + " iterations is " + pi.toPlainString());
-//    }
-
     /**
      * 使用高斯-勒让德算法计算 Pi 的值。
      *
@@ -56,8 +44,8 @@ public class PiCalculatorBenchmark {
         }
 
         BigDecimal piEstimate = a.add(b).pow(2).divide(FOUR.multiply(t), mc);
+        piEstimate.toString();
         return true;
-//        return piEstimate;
     }
 
     /**
