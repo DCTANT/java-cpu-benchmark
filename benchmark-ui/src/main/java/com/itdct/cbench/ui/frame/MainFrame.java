@@ -12,7 +12,6 @@ import com.itdct.cbench.model.CpuBenchmarkResultModel;
 import com.itdct.cbench.util.CpuBenchmarkResultUtil;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 
@@ -26,11 +25,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class MainFrame extends JFrame {
+    private final Benchmark benchmark;
     private JTextArea textArea;
     private JButton startButton;
     private JButton stopButton;
+    private JScrollPane scrollPane;
 
     public MainFrame() {
         // 设置窗口默认关闭操作
@@ -38,6 +41,8 @@ public class MainFrame extends JFrame {
         setTitle("DCT的CPU性能测试工具");
 
         createMenuBar();
+
+        benchmark = new Benchmark();
 
         JPanel centerTextPanel = createTextArea();
 
@@ -66,11 +71,12 @@ public class MainFrame extends JFrame {
         // 创建一个“开始”按钮
         startButton = new JButton("开始");
         stopButton = new JButton("停止");
+        stopButton.setEnabled(false);
 
         // 创建一个面板来容纳按钮，并设置布局管理器为 FlowLayout
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BorderLayout());
-        buttonPanel.add(Box.createHorizontalStrut(50),BorderLayout.WEST);
+        buttonPanel.add(Box.createHorizontalStrut(50), BorderLayout.WEST);
 
         JPanel centerButtonPanel = new JPanel();
         buttonPanel.add(centerButtonPanel, BorderLayout.CENTER);
@@ -79,25 +85,36 @@ public class MainFrame extends JFrame {
         centerButtonPanel.add(Box.createHorizontalStrut(30));
         centerButtonPanel.add(stopButton);
 
-        buttonPanel.add(Box.createHorizontalStrut(50),BorderLayout.EAST);
-        buttonPanel.add(Box.createVerticalStrut(10),BorderLayout.SOUTH);
+        buttonPanel.add(Box.createHorizontalStrut(50), BorderLayout.EAST);
+        buttonPanel.add(Box.createVerticalStrut(10), BorderLayout.SOUTH);
 
         startButton.addActionListener(e -> {
             textArea.setText("");
             startButton.setText("执行中……");
             startButton.setEnabled(false);
+            stopButton.setEnabled(true);
 
             Thread thread = new Thread(() -> {
-                Benchmark benchmark = new Benchmark();
                 benchmark.setOnPrint(s -> textArea.append(s + "\n"));
                 CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
-                String cpuBenchmarkResult = CpuBenchmarkResultUtil.getCpuBenchmarkResult(cpuBenchmarkResultModel);
-                textArea.append(cpuBenchmarkResult);
+
+                if (cpuBenchmarkResultModel.isAbort()) {
+                    textArea.setText("CPU测试被终止……");
+                } else {
+                    String cpuBenchmarkResult = CpuBenchmarkResultUtil.getCpuBenchmarkResult(cpuBenchmarkResultModel);
+                    textArea.append(cpuBenchmarkResult);
+                }
 
                 startButton.setText("开始");
                 startButton.setEnabled(true);
+                stopButton.setEnabled(false);
             });
             thread.start();
+        });
+
+        stopButton.addActionListener(e -> {
+            benchmark.abort();
+            stopButton.setEnabled(false);
         });
         return buttonPanel;
     }
@@ -107,12 +124,34 @@ public class MainFrame extends JFrame {
         textArea = new JTextArea("尚未开始……");
         textArea.setEditable(false); // 设置为只读
 
-        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane = new JScrollPane(textArea);
         // 在CENTER区域添加垂直空隙
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BorderLayout());
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         centerPanel.add(Box.createVerticalStrut(10), BorderLayout.PAGE_END); // 添加垂直间距
+
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                scrollToBottom();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                scrollToBottom();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                scrollToBottom();
+            }
+
+            private void scrollToBottom() {
+                textArea.setCaretPosition(textArea.getDocument().getLength());
+            }
+        });
+
         return centerPanel;
     }
 

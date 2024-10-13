@@ -51,17 +51,21 @@ public class Benchmark {
         onPrint.accept("多线程任务执行完成");
         onPrint.accept("\n");
 
-        double totalScore = 0.0;
-        for (SingleThreadResultModel threadResultModel : singleThreadResultModels) {
-            double score = threadResultModel.getScore();
-            totalScore += score;
-        }
-        double resultTotalScore = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        if (!forceStop) {
+            double totalScore = 0.0;
+            for (SingleThreadResultModel threadResultModel : singleThreadResultModels) {
+                double score = threadResultModel.getScore();
+                totalScore += score;
+            }
+            double resultTotalScore = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 
-        cpuBenchmarkResultModel.setSingleThreadScore(singleThreadResultModel.getScore());
-        cpuBenchmarkResultModel.setTotalThreadScore(resultTotalScore);
-        double ratio = resultTotalScore / singleThreadResultModel.getScore();
-        cpuBenchmarkResultModel.setMultipleThreadRatio(new BigDecimal(ratio).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            cpuBenchmarkResultModel.setSingleThreadScore(singleThreadResultModel.getScore());
+            cpuBenchmarkResultModel.setTotalThreadScore(resultTotalScore);
+            double ratio = resultTotalScore / singleThreadResultModel.getScore();
+            cpuBenchmarkResultModel.setMultipleThreadRatio(new BigDecimal(ratio).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        } else {
+            onPrint.accept("强制停止，无法计算分数");
+        }
 
         start = false;
         forceStop = false;
@@ -99,26 +103,23 @@ public class Benchmark {
 
         List<CpuLoopResultModel> cpuLoopResultModels = new ArrayList<>();
         final boolean[] stopByForce = {false};
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (forceStop) {
-                        piCalculatorBenchmark.setNeedStop(true);
-                        stopByForce[0] = true;
-                        break;
-                    }
+        Thread thread = new Thread(() -> {
+            while (true) {
+                if (forceStop) {
+                    piCalculatorBenchmark.setNeedStop(true);
+                    stopByForce[0] = true;
+                    break;
+                }
 
-                    long nowTime = System.currentTimeMillis();
-                    if (nowTime - programStartTime > totalBenchmarkTime) {
-                        piCalculatorBenchmark.setNeedStop(true);
-                        break;
-                    }
-                    try {
-                        Thread.sleep(5);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+                long nowTime = System.currentTimeMillis();
+                if (nowTime - programStartTime > totalBenchmarkTime) {
+                    piCalculatorBenchmark.setNeedStop(true);
+                    break;
+                }
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
