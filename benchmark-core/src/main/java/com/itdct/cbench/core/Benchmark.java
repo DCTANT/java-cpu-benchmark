@@ -12,6 +12,8 @@ import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -75,24 +77,27 @@ public class Benchmark {
     public Vector<SingleThreadResultModel> multiThreadBenchmark() {
         int availableProcessors = Runtime.getRuntime().availableProcessors();
         Vector<SingleThreadResultModel> totalResultModels = new Vector<>();
+
+        CountDownLatch countDownLatch = new CountDownLatch(availableProcessors);
         for (int i = 0; i < availableProcessors; i++) {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     SingleThreadResultModel singleThreadResultModel = singleThreadBenchmark();
                     totalResultModels.add(singleThreadResultModel);
+
+                    countDownLatch.countDown();
                 }
             });
             thread.start();
         }
 
-        while (totalResultModels.size() < availableProcessors) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            countDownLatch.await(40, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+
         return totalResultModels;
     }
 
