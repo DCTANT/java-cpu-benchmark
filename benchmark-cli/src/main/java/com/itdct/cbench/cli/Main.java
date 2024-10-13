@@ -1,4 +1,7 @@
-package com.itdct.cbench;
+package com.itdct.cbench.cli;
+
+import java.math.BigDecimal;
+import java.util.Locale;
 
 import com.itdct.cbench.core.Benchmark;
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
@@ -6,13 +9,11 @@ import com.itdct.cbench.model.CpuInfoModel;
 import com.itdct.cbench.model.SingleThreadResultModel;
 import com.itdct.cbench.util.GetCpuInfo;
 
-import java.math.BigDecimal;
-import java.util.Locale;
 import java.util.Scanner;
 
 /**
  * @author Zhouwx
- * @date 2024/10/13 15:30:27
+ * @date 2024/10/13 21:55:35
  * @version 1.0
  * @description
  */
