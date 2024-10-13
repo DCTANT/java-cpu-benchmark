@@ -6,6 +6,7 @@ import com.itdct.cbench.model.CpuInfoModel;
 import com.itdct.cbench.model.SingleThreadResultModel;
 import com.itdct.cbench.util.GetCpuInfo;
 
+import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -44,7 +45,7 @@ public class Main {
                 System.out.println(cpuInfoModel);
 
                 System.out.println("单线程共执行：" + cpuBenchmarkResultModel.getSingleThreadResultModel().getLoopCount() + "轮");
-                System.out.println("单线程分数为：" + cpuBenchmarkResultModel.getSingleThreadScore());
+                System.out.println("单线程分数为：" + new BigDecimal(cpuBenchmarkResultModel.getSingleThreadScore()).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
                 System.out.println("多线程共执行：" + cpuBenchmarkResultModel
                         .getTotalThreadResultModels()
                         .stream()
@@ -52,7 +53,7 @@ public class Main {
                         .reduce(Integer::sum)
                         .get()
                         + "轮");
-                System.out.println("多线程分数为：" + cpuBenchmarkResultModel.getTotalThreadScore());
+                System.out.println("多线程分数为：" + new BigDecimal(cpuBenchmarkResultModel.getTotalThreadScore()).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
                 System.out.println("多线程倍率为：" + cpuBenchmarkResultModel.getMultipleThreadRatio());
                 break;
             case "2":

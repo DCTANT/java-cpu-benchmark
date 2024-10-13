@@ -119,7 +119,7 @@ public class Benchmark {
                 cpuLoopResultModel.setLoopCount(loopNum);
                 cpuLoopResultModel.setIterations(iterations);
                 cpuLoopResultModel.setUseTime(useTime);
-                double score = 1.0 * iterations / (useTime + 0.1);
+                double score = 0.00314159265358979323846 * iterations;
 //                System.out.printf("第 %d 轮，获取到的CPU分数为：%f \n\n", loopNum, score);
                 cpuLoopResultModel.setScore(score);
                 cpuLoopResultModels.add(cpuLoopResultModel);
@@ -130,7 +130,7 @@ public class Benchmark {
                 break;
             }
             loopNum++;
-            iterations = (int) (iterations * 1.2);
+            iterations = (int) (iterations * 1.1);
         }
 
         double totalScore = 0.0;
