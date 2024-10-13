@@ -22,3 +22,8 @@ java -jar CpuBenchmark*.jar
 
 输入：q，可退出程序
 
+## TODOS
+* 尚未测试过MacOS
+* Android手机的CPU信息无法获取
+* 算法可以继续优化
+
