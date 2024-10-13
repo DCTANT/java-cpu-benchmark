@@ -4,7 +4,7 @@ package com.itdct.cbench.model;
  * @author Zhouwx
  * @date 2024/10/13 0:10:27
  * @version 1.0
- * @description
+ * @description CPU单次执行圆周率计算结果
  */
 public class CpuLoopResultModel {
     private int loopCount;

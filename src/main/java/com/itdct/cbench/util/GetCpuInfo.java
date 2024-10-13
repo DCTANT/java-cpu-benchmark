@@ -28,7 +28,10 @@ public class GetCpuInfo {
 
 
         if (osName.contains("linux")) {
-            cpuInfoModel.setCpuModelName(getLinuxCpuModelUsingNIO());
+            cpuInfoModel.setCpuModelName(getLinuxCpuInfo("model name"));
+            cpuInfoModel.setCpuCoreNum(Integer.parseInt(getLinuxCpuInfo("cpu cores")));
+            cpuInfoModel.setCpuLogicalProcessorNum(Runtime.getRuntime().availableProcessors());
+            cpuInfoModel.setCpuFrequency(Integer.parseInt(getLinuxCpuInfo("cpu MHz")));
         } else if (osName.contains("windows")) {
             cpuInfoModel.setCpuModelName(getWindowsCpuInfo("Name"));
             cpuInfoModel.setCpuCoreNum(Integer.parseInt(getWindowsCpuInfo("NumberOfCores")));
@@ -41,7 +44,7 @@ public class GetCpuInfo {
         return cpuInfoModel;
     }
 
-    private static String getLinuxCpuModelUsingNIO() {
+    private static String getLinuxCpuInfo(String modelName) {
         try {
             File file = new File("/proc/cpuinfo");
             FileInputStream fis = new FileInputStream(file);
@@ -50,7 +53,7 @@ public class GetCpuInfo {
             String content = StandardCharsets.UTF_8.decode(buffer).toString();
             String[] lines = content.split("\n");
             for (String line : lines) {
-                if (line.startsWith("model name")) {
+                if (line.startsWith(modelName)) {
                     return line.split(":")[1].trim();
                 }
             }

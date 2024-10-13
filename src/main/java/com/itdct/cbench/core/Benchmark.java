@@ -3,6 +3,7 @@ package com.itdct.cbench.core;
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
 import com.itdct.cbench.model.CpuInfoModel;
 import com.itdct.cbench.model.CpuLoopResultModel;
+import com.itdct.cbench.model.SingleThreadResultModel;
 import com.itdct.cbench.util.GetCpuInfo;
 import com.itdct.cbench.util.PiCalculatorBenchmark;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * @author Zhouwx
@@ -20,47 +22,57 @@ import java.util.List;
 public class Benchmark {
     private int totalBenchmarkTime = 10000;
 
-    public void benchmark() {
+    public CpuBenchmarkResultModel benchmark() {
         CpuBenchmarkResultModel cpuBenchmarkResultModel = new CpuBenchmarkResultModel();
         GetCpuInfo getCpuInfo = new GetCpuInfo();
         CpuInfoModel cpuInfoModel = getCpuInfo.getCpuInfo();
         cpuBenchmarkResultModel.setCpuInfoModel(cpuInfoModel);
 
         System.out.println("开始执行单线程分数评估");
-        double singledThreadBenchmark = singleThreadBenchmark();
+        SingleThreadResultModel singleThreadResultModel = singleThreadBenchmark();
+        cpuBenchmarkResultModel.setSingleThreadResultModel(singleThreadResultModel);
         System.out.println("单线程任务执行完成");
 
         System.out.println("开始执行多线程分数评估");
-        double multiThreadBenchmark = multiThreadBenchmark();
+        Vector<SingleThreadResultModel> singleThreadResultModels = multiThreadBenchmark();
+        cpuBenchmarkResultModel.setTotalThreadResultModels(singleThreadResultModels);
         System.out.println("多线程任务执行完成");
         System.out.println();
 
-        cpuBenchmarkResultModel.setSingleThreadScore(singledThreadBenchmark);
-        cpuBenchmarkResultModel.setTotalThreadScore(multiThreadBenchmark);
-        double ratio = multiThreadBenchmark / singledThreadBenchmark;
+        double totalScore = 0.0;
+        for (SingleThreadResultModel threadResultModel : singleThreadResultModels) {
+            double score = threadResultModel.getScore();
+            totalScore+= score;
+        }
+        double resultTotalScore = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+        cpuBenchmarkResultModel.setSingleThreadScore(singleThreadResultModel.getScore());
+        cpuBenchmarkResultModel.setTotalThreadScore(resultTotalScore);
+        double ratio = resultTotalScore / singleThreadResultModel.getScore();
         cpuBenchmarkResultModel.setMultipleThreadRatio(new BigDecimal(ratio).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-        System.out.println("单线程总分为：" + singledThreadBenchmark);
-        System.out.println("多线程总分为：" + multiThreadBenchmark);
-        System.out.println("多线程倍率为：" + cpuBenchmarkResultModel.getMultipleThreadRatio());
+//        System.out.println("单线程总分为：" + singleThreadResultModel.getScore());
+//        System.out.println("多线程总分为：" + resultTotalScore);
+//        System.out.println("多线程倍率为：" + cpuBenchmarkResultModel.getMultipleThreadRatio());
 
+        return cpuBenchmarkResultModel;
     }
 
-    public double multiThreadBenchmark() {
+    public Vector<SingleThreadResultModel> multiThreadBenchmark() {
         int availableProcessors = Runtime.getRuntime().availableProcessors();
-        ArrayList<Double> threadScores = new ArrayList<>();
+        Vector<SingleThreadResultModel> totalResultModels = new Vector<>();
         for (int i = 0; i < availableProcessors; i++) {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    double singledThreadBenchmark = singleThreadBenchmark();
-                    threadScores.add(singledThreadBenchmark);
+                    SingleThreadResultModel singleThreadResultModel = singleThreadBenchmark();
+                    totalResultModels.add(singleThreadResultModel);
                 }
             });
             thread.start();
         }
 
-        while (threadScores.size() < availableProcessors) {
+        while (totalResultModels.size() < availableProcessors) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -68,14 +80,15 @@ public class Benchmark {
             }
         }
 
-        double totalScore = 0.0;
-        for (Double threadScore : threadScores) {
-            totalScore+= threadScore;
-        }
+//        double totalScore = 0.0;
+//        for (Double threadScore : totalResultModels) {
+//            totalScore+= threadScore;
+//        }
 
-        return new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return totalResultModels;
     }
-    public double singleThreadBenchmark() {
+    public SingleThreadResultModel singleThreadBenchmark() {
+        SingleThreadResultModel singleThreadResultModel = new SingleThreadResultModel();
         long programStartTime = System.currentTimeMillis();
         PiCalculatorBenchmark piCalculatorBenchmark = new PiCalculatorBenchmark();
 
@@ -121,7 +134,9 @@ public class Benchmark {
                 cpuLoopResultModel.setScore(score);
                 cpuLoopResultModels.add(cpuLoopResultModel);
             } else {
-                System.out.println("时间已到，停止计算");
+                singleThreadResultModel.setLoopCount(loopNum);
+                singleThreadResultModel.setFinalIterations(iterations);
+//                System.out.println("时间已到，停止计算");
                 break;
             }
             loopNum++;
@@ -135,11 +150,10 @@ public class Benchmark {
         }
 
         double resultScore = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-//        cpuBenchmarkResultModel.setSingleThreadScore(resultScore);
-        System.out.println("总计耗时：" + (System.currentTimeMillis() - programStartTime));
-//        System.out.println("单线程总分为：" + resultScore);
+        singleThreadResultModel.setScore(resultScore);
+//        System.out.println("总计耗时：" + (System.currentTimeMillis() - programStartTime));
 
-        return resultScore;
+        return singleThreadResultModel;
     }
 
     public static void main(String[] args) {
