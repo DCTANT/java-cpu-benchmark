@@ -1,14 +1,14 @@
 package com.itdct.cbench.cli;
 
-import java.math.BigDecimal;
-import java.util.Locale;
-
 import com.itdct.cbench.core.Benchmark;
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
 import com.itdct.cbench.model.CpuInfoModel;
 import com.itdct.cbench.model.SingleThreadResultModel;
+import com.itdct.cbench.util.CpuBenchmarkResultUtil;
 import com.itdct.cbench.util.GetCpuInfo;
 
+import java.math.BigDecimal;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -45,20 +45,23 @@ public class Main {
                 if (cpuBenchmarkResultModel == null) {
                     return;
                 }
-                CpuInfoModel cpuInfoModel = cpuBenchmarkResultModel.getCpuInfoModel();
-                System.out.println(cpuInfoModel);
-
-                System.out.println("单线程共执行：" + cpuBenchmarkResultModel.getSingleThreadResultModel().getLoopCount() + "轮");
-                System.out.println("单线程分数为：" + new BigDecimal(cpuBenchmarkResultModel.getSingleThreadScore()).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-                System.out.println("多线程共执行：" + cpuBenchmarkResultModel
-                        .getTotalThreadResultModels()
-                        .stream()
-                        .map(SingleThreadResultModel::getLoopCount)
-                        .reduce(Integer::sum)
-                        .get()
-                        + "轮");
-                System.out.println("多线程分数为：" + new BigDecimal(cpuBenchmarkResultModel.getTotalThreadScore()).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
-                System.out.println("多线程倍率为：" + cpuBenchmarkResultModel.getMultipleThreadRatio());
+                String cpuBenchmarkResult = CpuBenchmarkResultUtil.getCpuBenchmarkResult(cpuBenchmarkResultModel);
+                System.out.println(cpuBenchmarkResult);
+//                CpuInfoModel cpuInfoModel = cpuBenchmarkResultModel.getCpuInfoModel();
+//                System.out.println(cpuInfoModel);
+//
+//                System.out.println("单线程共执行：" + cpuBenchmarkResultModel.getSingleThreadResultModel().getLoopCount() + "轮");
+//                System.out.println("单线程分数为：" + new BigDecimal(cpuBenchmarkResultModel.getSingleThreadScore()).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+//                System.out.println("多线程共执行：" + cpuBenchmarkResultModel
+//                        .getTotalThreadResultModels()
+//                        .stream()
+//                        .map(SingleThreadResultModel::getLoopCount)
+//                        .reduce(Integer::sum)
+//                        .get()
+//                        + "轮");
+//                System.out.println("多线程分数为：" + new BigDecimal(cpuBenchmarkResultModel.getTotalThreadScore()).setScale(2, BigDecimal.ROUND_HALF_UP).toString());
+//                System.out.println("总共 " + Runtime.getRuntime().availableProcessors() + " 个核心参与计算");
+//                System.out.println("多线程倍率为：" + cpuBenchmarkResultModel.getMultipleThreadRatio());
                 break;
             case "2":
                 // 获取CPU信息

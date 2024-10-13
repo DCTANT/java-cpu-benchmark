@@ -12,6 +12,7 @@ import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.function.Consumer;
 
 /**
  * @author Zhouwx
@@ -26,9 +27,11 @@ public class Benchmark {
     private boolean forceStop = false;
     private CpuBenchmarkResultModel cpuBenchmarkResultModel;
 
+    private Consumer<String> onPrint = System.out::println;
+
     public CpuBenchmarkResultModel benchmark() {
         if (start) {
-            System.out.println("正在运行中，无法重复开始");
+            onPrint.accept("正在运行中，无法重复开始");
             return null;
         }
         cpuBenchmarkResultModel = new CpuBenchmarkResultModel();
@@ -37,16 +40,16 @@ public class Benchmark {
         CpuInfoModel cpuInfoModel = getCpuInfo.getCpuInfo();
         cpuBenchmarkResultModel.setCpuInfoModel(cpuInfoModel);
 
-        System.out.println("开始执行单线程分数评估");
+        onPrint.accept("开始执行单线程分数评估");
         SingleThreadResultModel singleThreadResultModel = singleThreadBenchmark();
         cpuBenchmarkResultModel.setSingleThreadResultModel(singleThreadResultModel);
-        System.out.println("单线程任务执行完成");
+        onPrint.accept("单线程任务执行完成");
 
-        System.out.println("开始执行多线程分数评估");
+        onPrint.accept("开始执行多线程分数评估");
         Vector<SingleThreadResultModel> singleThreadResultModels = multiThreadBenchmark();
         cpuBenchmarkResultModel.setTotalThreadResultModels(singleThreadResultModels);
-        System.out.println("多线程任务执行完成");
-        System.out.println();
+        onPrint.accept("多线程任务执行完成");
+        onPrint.accept("\n");
 
         double totalScore = 0.0;
         for (SingleThreadResultModel threadResultModel : singleThreadResultModels) {
@@ -126,7 +129,7 @@ public class Benchmark {
         int precision = 100; // 精度设置为 50 位
         MathContext mc = new MathContext(precision); // 设置精度
         while (true) {
-            System.out.printf("开始执行第 %d 轮，当前迭代次数为：%d \n", loopNum, iterations);
+            onPrint.accept("开始执行第 " + loopNum + " 轮，当前迭代次数为：" + iterations);
             long startTime = System.currentTimeMillis();
             boolean successFinish = piCalculatorBenchmark.calculatePi(iterations, mc);
             if (successFinish) {
@@ -145,7 +148,7 @@ public class Benchmark {
             } else {
                 singleThreadResultModel.setLoopCount(loopNum);
                 singleThreadResultModel.setFinalIterations(iterations);
-//                System.out.println("时间已到，停止计算");
+//                onPrint.accept("时间已到，停止计算");
                 break;
             }
             loopNum++;
@@ -175,5 +178,10 @@ public class Benchmark {
         }
         forceStop = true;
         cpuBenchmarkResultModel.setAbort(true);
+    }
+
+    public Benchmark setOnPrint(Consumer<String> onPrint) {
+        this.onPrint = onPrint;
+        return this;
     }
 }

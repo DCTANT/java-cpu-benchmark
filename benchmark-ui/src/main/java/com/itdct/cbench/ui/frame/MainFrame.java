@@ -6,11 +6,31 @@ package com.itdct.cbench.ui.frame;
  * @version 1.0
  * @description
  */
-import javax.swing.*;
-import java.awt.*;
+
+import com.itdct.cbench.core.Benchmark;
+import com.itdct.cbench.model.CpuBenchmarkResultModel;
+import com.itdct.cbench.util.CpuBenchmarkResultUtil;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.FlowLayout;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 public class MainFrame extends JFrame {
     private JTextArea textArea;
+    private JButton startButton;
+    private JButton stopButton;
 
     public MainFrame() {
         // 设置窗口默认关闭操作
@@ -19,29 +39,39 @@ public class MainFrame extends JFrame {
 
         createMenuBar();
 
-        // 创建一个不可编辑的文本区域
-        textArea = new JTextArea("尚未开始……");
-        textArea.setEditable(false); // 设置为只读
+        JPanel centerTextPanel = createTextArea();
 
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        // 在CENTER区域添加垂直空隙
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BorderLayout());
-        centerPanel.add(scrollPane, BorderLayout.CENTER);
-        centerPanel.add(Box.createVerticalStrut(10), BorderLayout.PAGE_END); // 添加垂直间距
+        JPanel buttonPanel = createButtonPanel();
 
+        // 创建主面板并设置布局为 BorderLayout
+        Container mainPanel = getContentPane();
+        mainPanel.setLayout(new BorderLayout());
+
+        // 添加文本区域到主面板的 CENTER 区域
+        mainPanel.add(Box.createVerticalStrut(10), BorderLayout.NORTH);
+        mainPanel.add(Box.createHorizontalStrut(10), BorderLayout.WEST);
+        mainPanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
+        mainPanel.add(centerTextPanel, BorderLayout.CENTER);
+
+        // 添加按钮面板到主面板的 SOUTH 区域
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        // 设置默认大小
+        setSize(600, 400);
+        setLocationRelativeTo(null); // 居中显示
+        setVisible(true);
+    }
+
+    private JPanel createButtonPanel() {
         // 创建一个“开始”按钮
-        JButton startButton = new JButton("开始");
-        JButton stopButton = new JButton("停止");
+        startButton = new JButton("开始");
+        stopButton = new JButton("停止");
 
         // 创建一个面板来容纳按钮，并设置布局管理器为 FlowLayout
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.CYAN);
-//        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
         buttonPanel.setLayout(new BorderLayout());
-//        buttonPanel.add(Box.createHorizontalStrut(50)); // 添加一定的间隔
         buttonPanel.add(Box.createHorizontalStrut(50),BorderLayout.WEST);
-//        buttonPanel.add(Box.createRigidArea(new Dimension(20, 0))); // 增加间隔
+
         JPanel centerButtonPanel = new JPanel();
         buttonPanel.add(centerButtonPanel, BorderLayout.CENTER);
         centerButtonPanel.setLayout(new FlowLayout());
@@ -52,23 +82,38 @@ public class MainFrame extends JFrame {
         buttonPanel.add(Box.createHorizontalStrut(50),BorderLayout.EAST);
         buttonPanel.add(Box.createVerticalStrut(10),BorderLayout.SOUTH);
 
-        // 创建主面板并设置布局为 BorderLayout
-        Container mainPanel = getContentPane();
-        mainPanel.setLayout(new BorderLayout());
+        startButton.addActionListener(e -> {
+            textArea.setText("");
+            startButton.setText("执行中……");
+            startButton.setEnabled(false);
 
-        // 添加文本区域到主面板的 CENTER 区域
-        mainPanel.add(Box.createVerticalStrut(10), BorderLayout.NORTH);
-        mainPanel.add(Box.createHorizontalStrut(10), BorderLayout.WEST);
-        mainPanel.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
+            Thread thread = new Thread(() -> {
+                Benchmark benchmark = new Benchmark();
+                benchmark.setOnPrint(s -> textArea.append(s + "\n"));
+                CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
+                String cpuBenchmarkResult = CpuBenchmarkResultUtil.getCpuBenchmarkResult(cpuBenchmarkResultModel);
+                textArea.append(cpuBenchmarkResult);
 
-        // 添加按钮面板到主面板的 SOUTH 区域
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+                startButton.setText("开始");
+                startButton.setEnabled(true);
+            });
+            thread.start();
+        });
+        return buttonPanel;
+    }
 
-        // 设置默认大小
-        setSize(600, 400);
-        setLocationRelativeTo(null); // 居中显示
-        setVisible(true);
+    private JPanel createTextArea() {
+        // 创建一个不可编辑的文本区域
+        textArea = new JTextArea("尚未开始……");
+        textArea.setEditable(false); // 设置为只读
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        // 在CENTER区域添加垂直空隙
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BorderLayout());
+        centerPanel.add(scrollPane, BorderLayout.CENTER);
+        centerPanel.add(Box.createVerticalStrut(10), BorderLayout.PAGE_END); // 添加垂直间距
+        return centerPanel;
     }
 
     private void createMenuBar() {
