@@ -24,41 +24,49 @@ public class Main {
                 "Q：退出程序\n");
 
         while (true) {
-            System.out.print("请输入你的选择：");
-            String input = new Scanner(System.in).nextLine().toUpperCase(Locale.ROOT);
-            switch (input) {
-                case "1":
-                    // 测试CPU性能
-                    Benchmark benchmark = new Benchmark();
-                    CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
-                    CpuInfoModel cpuInfoModel = cpuBenchmarkResultModel.getCpuInfoModel();
-                    System.out.println(cpuInfoModel);
-
-                    System.out.println("单线程共执行：" + cpuBenchmarkResultModel.getSingleThreadResultModel().getLoopCount() + "轮");
-                    System.out.println("单线程分数为：" + cpuBenchmarkResultModel.getSingleThreadScore());
-                    System.out.println("多线程共执行：" + cpuBenchmarkResultModel
-                            .getTotalThreadResultModels()
-                            .stream()
-                            .map(SingleThreadResultModel::getLoopCount)
-                            .reduce(Integer::sum)
-                            .get()
-                            + "轮");
-                    System.out.println("多线程分数为：" + cpuBenchmarkResultModel.getTotalThreadScore());
-                    System.out.println("多线程倍率为：" + cpuBenchmarkResultModel.getMultipleThreadRatio());
-                    break;
-                case "2":
-                    // 获取CPU信息
-                    GetCpuInfo getCpuInfo = new GetCpuInfo();
-                    CpuInfoModel cpuInfo = getCpuInfo.getCpuInfo();
-                    System.out.println(cpuInfo);
-                    break;
-                case "Q":
-                    // 退出程序
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("无效的选择，请重新输入。");
+            try {
+                options();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
+    }
+
+    private static void options() {
+        System.out.print("请输入你的选择：");
+        String input = new Scanner(System.in).nextLine().toUpperCase(Locale.ROOT);
+        switch (input) {
+            case "1":
+                // 测试CPU性能
+                Benchmark benchmark = new Benchmark();
+                CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
+                CpuInfoModel cpuInfoModel = cpuBenchmarkResultModel.getCpuInfoModel();
+                System.out.println(cpuInfoModel);
+
+                System.out.println("单线程共执行：" + cpuBenchmarkResultModel.getSingleThreadResultModel().getLoopCount() + "轮");
+                System.out.println("单线程分数为：" + cpuBenchmarkResultModel.getSingleThreadScore());
+                System.out.println("多线程共执行：" + cpuBenchmarkResultModel
+                        .getTotalThreadResultModels()
+                        .stream()
+                        .map(SingleThreadResultModel::getLoopCount)
+                        .reduce(Integer::sum)
+                        .get()
+                        + "轮");
+                System.out.println("多线程分数为：" + cpuBenchmarkResultModel.getTotalThreadScore());
+                System.out.println("多线程倍率为：" + cpuBenchmarkResultModel.getMultipleThreadRatio());
+                break;
+            case "2":
+                // 获取CPU信息
+                GetCpuInfo getCpuInfo = new GetCpuInfo();
+                CpuInfoModel cpuInfo = getCpuInfo.getCpuInfo();
+                System.out.println(cpuInfo);
+                break;
+            case "Q":
+                // 退出程序
+                System.exit(0);
+                break;
+            default:
+                System.out.println("无效的选择，请重新输入。");
         }
     }
 }

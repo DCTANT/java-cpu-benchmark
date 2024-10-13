@@ -3,13 +3,9 @@ package com.itdct.cbench.util;
 import com.itdct.cbench.model.CpuInfoModel;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Zhouwx
@@ -18,51 +14,70 @@ import java.nio.charset.StandardCharsets;
  * @description
  */
 public class GetCpuInfo {
-    public static void main(String[] args) {
-        System.out.println(new GetCpuInfo().getCpuInfo());
-    }
-
     public CpuInfoModel getCpuInfo() {
         CpuInfoModel cpuInfoModel = new CpuInfoModel();
         String osName = System.getProperty("os.name").toLowerCase();
-
+        System.out.println("当前系统名称为：" + osName);
 
         if (osName.contains("linux")) {
-            cpuInfoModel.setCpuModelName(getLinuxCpuInfo("model name"));
-            cpuInfoModel.setCpuCoreNum(Integer.parseInt(getLinuxCpuInfo("cpu cores")));
-            cpuInfoModel.setCpuLogicalProcessorNum(Runtime.getRuntime().availableProcessors());
-            cpuInfoModel.setCpuFrequency(Integer.parseInt(getLinuxCpuInfo("cpu MHz")));
+            try {
+                cpuInfoModel.setCpuModelName(getLinuxCpuInfo("model name"));
+                cpuInfoModel.setCpuCoreNum(Integer.parseInt(getLinuxCpuInfo("cpu cores")));
+                cpuInfoModel.setCpuLogicalProcessorNum(getLogicProcessorNum());
+                cpuInfoModel.setCpuFrequency((int) Double.parseDouble(getLinuxCpuInfo("cpu MHz")));
+            } catch (Exception e) {
+                System.out.println("无法正确获取CPU信息");
+            }
         } else if (osName.contains("windows")) {
             cpuInfoModel.setCpuModelName(getWindowsCpuInfo("Name"));
             cpuInfoModel.setCpuCoreNum(Integer.parseInt(getWindowsCpuInfo("NumberOfCores")));
             cpuInfoModel.setCpuLogicalProcessorNum(Integer.parseInt(getWindowsCpuInfo("NumberOfLogicalProcessors")));
-            cpuInfoModel.setCpuFrequency(Integer.parseInt(getWindowsCpuInfo("CurrentClockSpeed")));
+            cpuInfoModel.setCpuFrequency((int) Double.parseDouble(getWindowsCpuInfo("CurrentClockSpeed")));
         } else {
-            System.out.println("Unsupported OS: " + osName);
+            System.out.println("不支持该系统: " + osName);
         }
 
         return cpuInfoModel;
     }
 
     private static String getLinuxCpuInfo(String modelName) {
-        try {
-            File file = new File("/proc/cpuinfo");
-            FileInputStream fis = new FileInputStream(file);
-            FileChannel channel = fis.getChannel();
-            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-            String content = StandardCharsets.UTF_8.decode(buffer).toString();
-            String[] lines = content.split("\n");
-            for (String line : lines) {
+        String path = "/proc/cpuinfo";
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
                 if (line.startsWith(modelName)) {
                     return line.split(":")[1].trim();
                 }
             }
-            channel.close();
-            fis.close();
         } catch (IOException e) {
+            System.err.println("Error reading " + path + ": " + e.getMessage());
             e.printStackTrace();
         }
-        return null;
+        return "";
+    }
+
+    private static int getLogicProcessorNum() {
+        int totalCount = 0;
+        String path = "/proc/cpuinfo";
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("processor")) {
+                    totalCount++;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading " + path + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+        return totalCount;
+    }
+
+    public static void main(String[] args) {
+        String modelName = getLinuxCpuInfo("cpu cores");
+        System.out.println(modelName);
+//        int logicProcessorNum = getLogicProcessorNum();
+//        System.out.println(logicProcessorNum);
     }
 
     private static String getWindowsCpuInfo(String type) {
