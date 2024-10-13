@@ -6,6 +6,7 @@
 ## 优势
 * 快速，默认单线程和多线程都执行10秒，仅需20秒即可得出当前CPU的性能成绩
 * 全平台支持，支持Windows、Linux、MacOS等，甚至在手机上可以使用Termux+JDK17，能够计算手机的CPU性能
+* 基于JDK8开发，兼容性更好
 
 ## 使用方法
 * 打出jar包
@@ -26,4 +27,5 @@ java -jar CpuBenchmark*.jar
 * 尚未测试过MacOS
 * Android手机的CPU信息无法获取
 * 算法可以继续优化
+* 可以增加GUI
 
