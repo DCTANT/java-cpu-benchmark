@@ -33,7 +33,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -49,12 +48,13 @@ public class MainFrame extends JFrame {
     private CpuBenchmarkResultModel cpuBenchmarkResultModel;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+    private final String versionName = "1.2-SNAPSHOT";
 
     public MainFrame() {
         context = this;
         // 设置窗口默认关闭操作
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Java版CPU性能测试工具——By DecentAnt");
+        setTitle("Java版CPU性能测试工具——By DecentAnt V" + versionName);
 
         createMenuBar();
 
@@ -240,9 +240,7 @@ public class MainFrame extends JFrame {
         setJMenuBar(menuBar);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainFrame();
-        });
+    public String getVersionName() {
+        return versionName;
     }
 }

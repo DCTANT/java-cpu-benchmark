@@ -1,5 +1,7 @@
 package com.itdct.cbench.ui.dialog;
 
+import com.itdct.cbench.ui.frame.MainFrame;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 
@@ -15,13 +17,14 @@ import javax.swing.JTextArea;
  * @description
  */
 public class AboutDialog extends JDialog {
-    public AboutDialog(JFrame owner, String title) {
+    public AboutDialog(MainFrame owner, String title) {
         super(owner, title, false); // 设置为非模态对话框
         setLayout(new BorderLayout());
 
         JTextArea aboutText = new JTextArea(
                 "该软件由DecentAnt（CSDN：DCTANT）编写，使用类似于SuperPI算法计算CPU的性能分数，且采用递进式，不会让老旧CPU卡死，且能够在任意平台执行，甚至让手机CPU与电脑CPU同台竞技。\n" +
-                        "项目地址：https://gitee.com/decentant/java-cpu-benchmark"
+                        "项目地址：https://gitee.com/decentant/java-cpu-benchmark\n" +
+                        "当前版本号：V"+owner.getVersionName()
         );
         aboutText.setEditable(false); // 设置为只读
         aboutText.setLineWrap(true); // 自动换行
@@ -37,6 +40,7 @@ public class AboutDialog extends JDialog {
         setSize(400, 300);
         setLocationRelativeTo(owner); // 居中显示
         setVisible(true);
+        setResizable(false);
     }
 
 }
