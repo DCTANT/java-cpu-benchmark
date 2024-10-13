@@ -65,11 +65,11 @@ public class CpuInfoModel {
 
     @Override
     public String toString() {
-        return "CpuInfoModel{" +
-                "cpuModelName='" + cpuModelName + '\'' +
-                ", cpuCoreNum=" + cpuCoreNum +
-                ", cpuLogicalProcessorNum=" + cpuLogicalProcessorNum +
-                ", cpuFrequency=" + cpuFrequency +
-                '}';
+        return "CPU信息：\n" +
+                "CPU型号：" + cpuModelName + "\n" +
+                "CPU核心数：" + cpuCoreNum + "\n" +
+                "CPU逻辑处理器数：" + cpuLogicalProcessorNum + "\n" +
+                "CPU基础主频：" + cpuFrequency + "MHz\n";
+
     }
 }

@@ -51,10 +51,6 @@ public class Benchmark {
         double ratio = resultTotalScore / singleThreadResultModel.getScore();
         cpuBenchmarkResultModel.setMultipleThreadRatio(new BigDecimal(ratio).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-//        System.out.println("单线程总分为：" + singleThreadResultModel.getScore());
-//        System.out.println("多线程总分为：" + resultTotalScore);
-//        System.out.println("多线程倍率为：" + cpuBenchmarkResultModel.getMultipleThreadRatio());
-
         return cpuBenchmarkResultModel;
     }
 
@@ -79,12 +75,6 @@ public class Benchmark {
                 throw new RuntimeException(e);
             }
         }
-
-//        double totalScore = 0.0;
-//        for (Double threadScore : totalResultModels) {
-//            totalScore+= threadScore;
-//        }
-
         return totalResultModels;
     }
     public SingleThreadResultModel singleThreadBenchmark() {
@@ -123,14 +113,14 @@ public class Benchmark {
             if (successFinish) {
                 long endTime = System.currentTimeMillis();
                 long useTime = endTime - startTime;
-                System.out.printf("第 %d 轮执行完成，用时 %d 毫秒 \n", loopNum, useTime);
+//                System.out.printf("第 %d 轮执行完成，用时 %d 毫秒 \n", loopNum, useTime);
 
                 CpuLoopResultModel cpuLoopResultModel = new CpuLoopResultModel();
                 cpuLoopResultModel.setLoopCount(loopNum);
                 cpuLoopResultModel.setIterations(iterations);
                 cpuLoopResultModel.setUseTime(useTime);
-                double score = 0.1 * iterations * loopNum / (useTime + 10);
-                System.out.printf("第 %d 轮，获取到的CPU分数为：%f \n\n", loopNum, score);
+                double score = 1.0 * iterations / (useTime + 0.1);
+//                System.out.printf("第 %d 轮，获取到的CPU分数为：%f \n\n", loopNum, score);
                 cpuLoopResultModel.setScore(score);
                 cpuLoopResultModels.add(cpuLoopResultModel);
             } else {
@@ -152,7 +142,6 @@ public class Benchmark {
         double resultScore = new BigDecimal(totalScore).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         singleThreadResultModel.setScore(resultScore);
 //        System.out.println("总计耗时：" + (System.currentTimeMillis() - programStartTime));
-
         return singleThreadResultModel;
     }
 

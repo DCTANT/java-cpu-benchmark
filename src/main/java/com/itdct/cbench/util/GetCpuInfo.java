@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * @author Zhouwx
- * @date 2024/10/12 23:34:47
  * @version 1.0
+ * @date 2024/10/12 23:34:47
  * @description
  */
 public class GetCpuInfo {
@@ -22,7 +22,7 @@ public class GetCpuInfo {
         System.out.println(new GetCpuInfo().getCpuInfo());
     }
 
-    public  CpuInfoModel getCpuInfo() {
+    public CpuInfoModel getCpuInfo() {
         CpuInfoModel cpuInfoModel = new CpuInfoModel();
         String osName = System.getProperty("os.name").toLowerCase();
 
@@ -67,7 +67,7 @@ public class GetCpuInfo {
 
     private static String getWindowsCpuInfo(String type) {
         try {
-            Process process = Runtime.getRuntime().exec("wmic cpu get "+type);
+            Process process = Runtime.getRuntime().exec("wmic cpu get " + type);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             boolean firstLine = true;
@@ -78,7 +78,7 @@ public class GetCpuInfo {
                     continue; // Skip the header line
                 }
 //                return line.trim();
-                stringBuilder.append(line+"\n");
+                stringBuilder.append(line + "\n");
             }
             reader.close();
             process.waitFor();
