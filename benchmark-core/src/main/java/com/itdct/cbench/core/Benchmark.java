@@ -158,7 +158,7 @@ public class Benchmark {
                 break;
             }
             loopNum++;
-            iterations = (int) (iterations * 1.1);
+            iterations = new BigDecimal(iterations * 1.03141592653589793238).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
         }
 
         if (stopByForce[0]) {
