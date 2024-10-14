@@ -35,7 +35,6 @@ java -jar benchmark-cli*.jar
 
 ## TODOS
 * 尚未测试过MacOS
-* Android手机的CPU信息无法获取
 * 增加结果提交功能（目前服务器还没搭建完成）
 
 ## CPU性能汇总（1.3版）

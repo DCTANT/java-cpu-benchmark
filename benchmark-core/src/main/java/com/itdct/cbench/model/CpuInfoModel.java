@@ -27,6 +27,11 @@ public class CpuInfoModel {
      */
     private int cpuFrequency;
 
+    /**
+     * 设备名称（针对Android手机）
+     */
+    private String deviceName;
+
     public String getCpuModelName() {
         return cpuModelName;
     }
@@ -63,13 +68,29 @@ public class CpuInfoModel {
         return this;
     }
 
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public CpuInfoModel setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+        return this;
+    }
+
     @Override
     public String toString() {
-        return "CPU信息：\n" +
-                "CPU型号：" + cpuModelName + "\n" +
-                "CPU核心数：" + cpuCoreNum + "\n" +
-                "CPU逻辑处理器数：" + cpuLogicalProcessorNum + "\n" +
-                "CPU基础主频：" + cpuFrequency + "MHz\n";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("CPU信息：\n");
+        if (cpuModelName != null) {
+            stringBuilder.append("CPU型号：" + cpuModelName + "\n");
+        }
+        if (deviceName != null) {
+            stringBuilder.append("设备名称：" + deviceName + "\n");
+        }
+        stringBuilder.append("CPU核心数：" + cpuCoreNum + "\n");
+        stringBuilder.append("CPU逻辑处理器数：" + cpuLogicalProcessorNum + "\n");
+        stringBuilder.append("CPU基础主频：" + cpuFrequency + "MHz\n");
+        return stringBuilder.toString();
 
     }
 }

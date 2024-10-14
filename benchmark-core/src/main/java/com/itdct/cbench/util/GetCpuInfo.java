@@ -19,15 +19,36 @@ public class GetCpuInfo {
         String osName = System.getProperty("os.name").toLowerCase();
         System.out.println("当前系统名称为：" + osName);
 
-        // TODO: Zhouwx: 2024/10/14 Termux获取手机型号
         if (osName.contains("linux")) {
-            try {
-                cpuInfoModel.setCpuModelName(getLinuxCpuInfo("model name"));
-                cpuInfoModel.setCpuCoreNum(Integer.parseInt(getLinuxCpuInfo("cpu cores")));
+            String bashResult = getBashResult("uname -a");
+            if (bashResult.endsWith("Android")) {
+                cpuInfoModel.setDeviceName(getBashResult("getprop ro.product.brand") + " " + getBashResult("getprop ro.product.model"));
+                String cpuInfo = getBashResult("cat /proc/cpuinfo");
+                if (cpuInfo != null && !cpuInfo.isEmpty()) {
+                    int processorNum = 0;
+                    for (String string : cpuInfo.split("\n")) {
+                        if (string.startsWith("processor")) {
+                            processorNum++;
+                        } else if (string.startsWith("Hardware")) {
+                            String cpuName = string.split(":")[1].trim();
+                            cpuInfoModel.setCpuModelName(cpuName);
+                        }
+                    }
+                    cpuInfoModel.setCpuCoreNum(processorNum);
+                }
+                if (cpuInfoModel.getCpuModelName() == null || cpuInfoModel.getCpuModelName().isEmpty()) {
+                    cpuInfoModel.setCpuModelName(getBashResult("getprop ro.soc.manufacturer") + " " + getBashResult("getprop ro.soc.model"));
+                }
                 cpuInfoModel.setCpuLogicalProcessorNum(getLogicProcessorNum());
-                cpuInfoModel.setCpuFrequency((int) Double.parseDouble(getLinuxCpuInfo("cpu MHz")));
-            } catch (Exception e) {
-                System.out.println("无法正确获取CPU信息");
+            } else {
+                try {
+                    cpuInfoModel.setCpuModelName(getLinuxCpuInfo("model name"));
+                    cpuInfoModel.setCpuCoreNum(Integer.parseInt(getLinuxCpuInfo("cpu cores")));
+                    cpuInfoModel.setCpuLogicalProcessorNum(getLogicProcessorNum());
+                    cpuInfoModel.setCpuFrequency((int) Double.parseDouble(getLinuxCpuInfo("cpu MHz")));
+                } catch (Exception e) {
+                    System.out.println("无法正确获取CPU信息");
+                }
             }
         } else if (osName.contains("windows")) {
             cpuInfoModel.setCpuModelName(getWindowsCpuInfo("Name"));
@@ -39,6 +60,27 @@ public class GetCpuInfo {
         }
 
         return cpuInfoModel;
+    }
+
+    private static String getBashResult(String command) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+            BufferedReader combinedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String combinedLine;
+            while ((combinedLine = combinedReader.readLine()) != null) {
+                stringBuilder.append(combinedLine);
+            }
+            combinedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+    public static void main(String[] args) {
+        String bashResult = getBashResult("wmic cpu get Name");
+        System.out.println(bashResult);
     }
 
     private static String getLinuxCpuInfo(String modelName) {
