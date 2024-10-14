@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.itdct.cbench</groupId>
-            <artifactId>benchmark-core</artifactId>
+            <artifactId>benchmark-cli</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

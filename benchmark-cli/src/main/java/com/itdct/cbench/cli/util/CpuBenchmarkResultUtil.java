@@ -1,10 +1,19 @@
-package com.itdct.cbench.util;
+package com.itdct.cbench.cli.util;
 
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
 import com.itdct.cbench.model.CpuInfoModel;
 import com.itdct.cbench.model.SingleThreadResultModel;
 
 import java.math.BigDecimal;
+
+import static com.itdct.cbench.cli.language.LangConstant.coreParticipate;
+import static com.itdct.cbench.cli.language.LangConstant.coreRatio;
+import static com.itdct.cbench.cli.language.LangConstant.multiThreadScore;
+import static com.itdct.cbench.cli.language.LangConstant.multiThreadTotalExecute;
+import static com.itdct.cbench.cli.language.LangConstant.round;
+import static com.itdct.cbench.cli.language.LangConstant.singleThreadScore;
+import static com.itdct.cbench.cli.language.LangConstant.singleThreadTotalExecute;
+import static com.itdct.cbench.cli.language.LangConstant.total;
 
 /**
  * @author Zhouwx
@@ -21,15 +30,15 @@ public class CpuBenchmarkResultUtil {
         StringBuilder resultBuilder = new StringBuilder();
         CpuInfoModel cpuInfoModel = cpuBenchmarkResultModel.getCpuInfoModel();
         resultBuilder.append(cpuInfoModel.toString()).append("\n");
-        resultBuilder.append("单线程共执行：")
+        resultBuilder.append(Language.get(singleThreadTotalExecute))
                 .append(cpuBenchmarkResultModel.getSingleThreadResultModel().getLoopCount())
-                .append("轮")
+                .append(Language.get(round))
                 .append("\n");
-        resultBuilder.append("单线程分数为：")
+        resultBuilder.append(Language.get(singleThreadScore))
                 .append(new BigDecimal(cpuBenchmarkResultModel.getSingleThreadScore()).setScale(2, BigDecimal.ROUND_HALF_UP)
                         .toString())
                 .append("\n");
-        resultBuilder.append("多线程共执行：")
+        resultBuilder.append(Language.get(multiThreadTotalExecute))
                 .append(cpuBenchmarkResultModel
                         .getTotalThreadResultModels()
                         .stream()
@@ -37,16 +46,17 @@ public class CpuBenchmarkResultUtil {
                         .reduce(Integer::sum)
                         .get()
                 )
-                .append("轮")
+                .append(Language.get(round))
                 .append("\n");
-        resultBuilder.append("多线程分数为：")
+        resultBuilder.append(Language.get(multiThreadScore))
                 .append(new BigDecimal(cpuBenchmarkResultModel.getTotalThreadScore()).setScale(2, BigDecimal.ROUND_HALF_UP)
                         .toString())
                 .append("\n");
-        resultBuilder.append("总共 ")
+        resultBuilder.append(Language.get(total))
                 .append(Runtime.getRuntime().availableProcessors())
-                .append( " 个核心参与计算\n");
-        resultBuilder.append("多线程倍率为：")
+                .append(Language.get(coreParticipate))
+                .append("\n");
+        resultBuilder.append(Language.get(coreRatio))
                 .append(cpuBenchmarkResultModel.getMultipleThreadRatio())
                 .append("\n");
 

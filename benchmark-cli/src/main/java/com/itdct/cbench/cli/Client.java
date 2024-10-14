@@ -1,13 +1,17 @@
 package com.itdct.cbench.cli;
 
+import com.itdct.cbench.cli.language.LangConstant;
+import com.itdct.cbench.cli.language.LangType;
+import com.itdct.cbench.cli.util.Language;
 import com.itdct.cbench.core.Benchmark;
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
 import com.itdct.cbench.model.CpuInfoModel;
-import com.itdct.cbench.util.CpuBenchmarkResultUtil;
+import com.itdct.cbench.cli.util.CpuBenchmarkResultUtil;
 import com.itdct.cbench.util.GetCpuInfo;
 
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 /**
  * @author Zhouwx
@@ -16,14 +20,7 @@ import java.util.Scanner;
  * @description
  */
 public class Client {
-
     public void run(){
-        System.out.println("欢迎来到DCT制作的Java版CPU性能测试工具\n" +
-                "以下是功能选项：\n" +
-                "1：开始CPU性能测试\n" +
-                "2：获取CPU信息\n" +
-                "Q：退出程序\n");
-
         while (true) {
             try {
                 options();
@@ -34,12 +31,30 @@ public class Client {
     }
 
     private void options() {
-        System.out.print("请输入你的选择：");
+        System.out.println(Language.get("menu"));
         String input = new Scanner(System.in).nextLine().toUpperCase(Locale.ROOT);
         switch (input) {
             case "1":
                 // 测试CPU性能
                 Benchmark benchmark = new Benchmark();
+                benchmark.setOnPrint(originString -> {
+                    String result = originString;
+                    if (originString.startsWith("开始执行第")) {
+                        result = result.replace("开始执行第 ", Language.get(LangConstant.startExecute));
+                        result = result.replace("轮", Language.get(LangConstant.round));
+                        result = result.replace("，当前迭代次数为：", Language.get(LangConstant.nowIterationIs));
+                    } else if (originString.equals("开始执行单线程分数评估")) {
+                        result = Language.get(LangConstant.startSingleThreadEvaluate);
+                    }else if (originString.equals("开始执行多线程分数评估")) {
+                        result = Language.get(LangConstant.startMultiThreadEvaluate);
+                    } else if (originString.equals("单线程任务执行完成")) {
+                        result = Language.get(LangConstant.singleThreadExeFinish);
+                    }else if (originString.equals("多线程任务执行完成")) {
+                        result = Language.get(LangConstant.multiThreadExeFinish);
+                    }
+
+                    System.out.println(result);
+                });
                 CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
                 if (cpuBenchmarkResultModel == null) {
                     return;
@@ -53,12 +68,19 @@ public class Client {
                 CpuInfoModel cpuInfo = getCpuInfo.getCpuInfo();
                 System.out.println(cpuInfo);
                 break;
+            case "3":
+                if (Language.languageType == LangType.ENGLISH) {
+                    Language.languageType = LangType.CHINESE;
+                } else {
+                    Language.languageType = LangType.ENGLISH;
+                }
+                break;
             case "Q":
                 // 退出程序
                 System.exit(0);
                 break;
             default:
-                System.out.println("无效的选择，请重新输入。");
+                System.out.println(Language.get("wrongInput"));
         }
     }
 

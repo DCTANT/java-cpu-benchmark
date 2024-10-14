@@ -7,10 +7,11 @@ package com.itdct.cbench.ui.frame;
  * @description
  */
 
+import com.itdct.cbench.cli.util.CpuBenchmarkResultUtil;
 import com.itdct.cbench.core.Benchmark;
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
 import com.itdct.cbench.ui.dialog.AboutDialog;
-import com.itdct.cbench.util.CpuBenchmarkResultUtil;
+
 
 import java.awt.BorderLayout;
 import java.awt.Container;

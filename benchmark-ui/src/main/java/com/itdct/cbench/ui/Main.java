@@ -1,5 +1,7 @@
 package com.itdct.cbench.ui;
 
+import com.itdct.cbench.cli.language.LangType;
+import com.itdct.cbench.cli.util.Language;
 import com.itdct.cbench.ui.frame.MainFrame;
 
 import javax.swing.SwingUtilities;
@@ -12,6 +14,7 @@ import javax.swing.SwingUtilities;
  */
 public class Main {
     public static void main(String[] args) {
+        Language.languageType = LangType.CHINESE;
         SwingUtilities.invokeLater(() -> {
             new MainFrame();
         });
