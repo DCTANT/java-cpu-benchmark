@@ -131,8 +131,8 @@ public class Benchmark {
         thread.start();
 
         int loopNum = 1;
-        int iterations = 100;
-        int precision = 100; // 精度设置为 50 位
+        int iterations = 314;
+        int precision = 100; // 精度设置为 100 位
         MathContext mc = new MathContext(precision); // 设置精度
         while (true) {
             onPrint.accept("开始执行第 " + loopNum + " 轮，当前迭代次数为：" + iterations);
