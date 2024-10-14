@@ -11,9 +11,12 @@
     <artifactId>benchmark-native</artifactId>
 
     <properties>
+        <java.version>17</java.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <dependencies>
@@ -23,5 +26,20 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>benchmark-native-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.9.28</version>
+                <configuration>
+                    <mainClass>com.itdct.cbench.nativerun.Main</mainClass>
+                    <imageName>benchmark-native-${project.version}</imageName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
