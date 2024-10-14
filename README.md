@@ -18,10 +18,16 @@
 mvn clean package
 ```
 
-* 执行jar包
+* 执行cli版本jar包
 ```shell
-java -jar CpuBenchmark*.jar
+java -jar benchmark-cli*.jar
 ```
+
+* 执行ui版本jar包
+双击打开Java版CPU性能测试工具.jar，即可。如果无法打开，则尝试使用命令行执行
+
+* 执行native版本
+直接执行即可
 
 输入：1，即可执行CPU性能测试
 
@@ -43,5 +49,6 @@ java -jar CpuBenchmark*.jar
 |   小米9(SD 855)   | 1982.45 | 9188.78 |
 | 华为Mate10(麒麟970) | 923.60 | 5293.64 |
 |  红米3S(SD 430)   | 390.31 | 2127.60 |
+|    i7 8700K     | 2903.54 | 21985.10 |
 
 
