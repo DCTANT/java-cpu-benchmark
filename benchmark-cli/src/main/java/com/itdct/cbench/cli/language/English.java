@@ -14,10 +14,10 @@ public class English {
     static {
         map.put(LangConstant.menu, "Welcome to Java version CPU Benchmark Tool developed by DCT\n" +
                 "Functional options\n" +
-                "1：Start CPU Benchmark\n" +
-                "2：Get CPU Information\n" +
-                "3：Change to Chinese (切换到中文，可能出现乱码)\n" +
-                "Q：Quit\n" +
+                "1: Start CPU Benchmark\n" +
+                "2: Get CPU Information\n" +
+                "3: Change to Chinese (切换到中文，可能出现乱码)\n" +
+                "Q: Quit\n" +
                 "Please input your choice: \n");
 
         map.put(LangConstant.inputWrong, "Invalid selection, please re-enter.");
