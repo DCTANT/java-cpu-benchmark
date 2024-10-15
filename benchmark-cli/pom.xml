@@ -23,6 +23,12 @@
             <artifactId>benchmark-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.itdct.cbench</groupId>
+            <artifactId>benchmark-report</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
