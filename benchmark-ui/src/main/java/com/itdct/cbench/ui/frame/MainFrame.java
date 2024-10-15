@@ -49,7 +49,7 @@ public class MainFrame extends JFrame {
     private CpuBenchmarkResultModel cpuBenchmarkResultModel;
 
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-    private final String versionName = "1.3-SNAPSHOT";
+    private final String versionName = "1.3.1-SNAPSHOT";
 
     public MainFrame() {
         context = this;

@@ -36,5 +36,14 @@ public class English {
         map.put(LangConstant.startMultiThreadEvaluate, "Start performing multi threads score evaluation");
         map.put(LangConstant.singleThreadExeFinish, "Single thread task execution completed");
         map.put(LangConstant.multiThreadExeFinish, " Multi threads task execution completed");
+
+        map.put(LangConstant.nowSystemName, "Now system name is: ");
+        map.put(LangConstant.cpuInfo, "<----------- CPU info ----------->");
+        map.put(LangConstant.cpuInfoEnd, "<-------------------------------->");
+        map.put(LangConstant.cpuModelName, "CPU model name: ");
+        map.put(LangConstant.deviceName, "Device name: ");
+        map.put(LangConstant.cpuCoreNum, "Number of CPU cores: ");
+        map.put(LangConstant.cpuLogicCoreNum, "Number of CPU logical processors: ");
+        map.put(LangConstant.cpuFrequency, "Basic CPU frequency: ");
     }
 }

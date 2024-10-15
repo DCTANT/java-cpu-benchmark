@@ -36,6 +36,15 @@ public class Chinese {
         map.put(LangConstant.startMultiThreadEvaluate, "开始执行多线程分数评估");
         map.put(LangConstant.singleThreadExeFinish, "单线程任务执行完成");
         map.put(LangConstant.multiThreadExeFinish, "多线程任务执行完成");
+
+        map.put(LangConstant.nowSystemName, "当前系统名称为：");
+        map.put(LangConstant.cpuInfo, "<----------- CPU信息 ----------->");
+        map.put(LangConstant.cpuInfoEnd, "<------------------------------->");
+        map.put(LangConstant.cpuModelName, "CPU型号：");
+        map.put(LangConstant.deviceName, "设备名称：");
+        map.put(LangConstant.cpuCoreNum, "CPU核心数：");
+        map.put(LangConstant.cpuLogicCoreNum, "CPU逻辑处理器数：");
+        map.put(LangConstant.cpuFrequency, "CPU基础主频：");
     }
 
 }

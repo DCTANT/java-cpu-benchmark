@@ -2,16 +2,16 @@ package com.itdct.cbench.cli;
 
 import com.itdct.cbench.cli.language.LangConstant;
 import com.itdct.cbench.cli.language.LangType;
+import com.itdct.cbench.cli.util.CpuBenchmarkResultUtil;
+import com.itdct.cbench.cli.util.CpuInfoResultUtil;
 import com.itdct.cbench.cli.util.Language;
 import com.itdct.cbench.core.Benchmark;
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
 import com.itdct.cbench.model.CpuInfoModel;
-import com.itdct.cbench.cli.util.CpuBenchmarkResultUtil;
 import com.itdct.cbench.util.GetCpuInfo;
 
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 /**
  * @author Zhouwx
@@ -66,7 +66,7 @@ public class Client {
                 // 获取CPU信息
                 GetCpuInfo getCpuInfo = new GetCpuInfo();
                 CpuInfoModel cpuInfo = getCpuInfo.getCpuInfo();
-                System.out.println(cpuInfo);
+                System.out.println(CpuInfoResultUtil.getCpuInfoResult(cpuInfo));
                 break;
             case "3":
                 if (Language.languageType == LangType.ENGLISH) {

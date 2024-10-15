@@ -17,7 +17,7 @@ public class GetCpuInfo {
     public CpuInfoModel getCpuInfo() {
         CpuInfoModel cpuInfoModel = new CpuInfoModel();
         String osName = System.getProperty("os.name").toLowerCase();
-        System.out.println("当前系统名称为：" + osName);
+//        System.out.println("当前系统名称为：" + osName);
 
         if (osName.contains("linux")) {
             String bashResult = getBashResult("uname -a");

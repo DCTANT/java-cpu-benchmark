@@ -23,4 +23,13 @@ public interface LangConstant {
     String startMultiThreadEvaluate = "startMultiThreadEvaluate";
     String singleThreadExeFinish = "singleThreadExeFinish";
     String multiThreadExeFinish = "multiThreadExeFinish";
+
+    String nowSystemName = "nowSystemName";
+    String cpuInfo = "cpuInfo";
+    String cpuInfoEnd = "cpuInfoEnd";
+    String cpuModelName = "cpuModelName";
+    String deviceName = "deviceName";
+    String cpuCoreNum = "cpuCoreNum";
+    String cpuLogicCoreNum = "cpuLogicCoreNum";
+    String cpuFrequency = "cpuFrequency";
 }

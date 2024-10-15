@@ -1,5 +1,6 @@
 package com.itdct.cbench.cli.util;
 
+import com.itdct.cbench.cli.language.LangConstant;
 import com.itdct.cbench.model.CpuBenchmarkResultModel;
 import com.itdct.cbench.model.CpuInfoModel;
 import com.itdct.cbench.model.SingleThreadResultModel;
@@ -27,9 +28,10 @@ public class CpuBenchmarkResultUtil {
         if (cpuBenchmarkResultModel == null) {
             return "";
         }
+
         StringBuilder resultBuilder = new StringBuilder();
         CpuInfoModel cpuInfoModel = cpuBenchmarkResultModel.getCpuInfoModel();
-        resultBuilder.append(cpuInfoModel.toString()).append("\n");
+        resultBuilder.append(CpuInfoResultUtil.getCpuInfoResult(cpuInfoModel)).append("\n");
         resultBuilder.append(Language.get(singleThreadTotalExecute))
                 .append(cpuBenchmarkResultModel.getSingleThreadResultModel().getLoopCount())
                 .append(Language.get(round))
