@@ -32,6 +32,7 @@ public class AboutDialog extends JDialog {
         aboutText.setLineWrap(true); // 自动换行
         aboutText.setWrapStyleWord(true); // 按单词换行
         aboutText.setBackground(new Color(0, 0, 0, 0));
+        aboutText.setOpaque(false);
 
         add(aboutText, BorderLayout.CENTER);
         add(Box.createVerticalStrut(10), BorderLayout.NORTH);
