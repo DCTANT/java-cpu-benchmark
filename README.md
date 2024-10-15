@@ -43,7 +43,8 @@ java -jar benchmark-cli*.jar
 ## TODOS
 * 尚未测试过MacOS
 * 增加结果提交功能（目前服务器还没搭建完成）
-* i18n继续更新
+* 软件更新提示
+* 软件图标logo/项目logo
 
 ## CPU性能汇总（1.3版）
 |    CPU型号/手机型号     |  单核分数   |   多核分数   |
