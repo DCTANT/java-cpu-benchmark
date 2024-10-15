@@ -23,7 +23,7 @@ public class Chinese {
         map.put(LangConstant.inputWrong, "无效的选择，请重新输入。");
         map.put(LangConstant.singleThreadTotalExecute, "单线程共执行：");
         map.put(LangConstant.singleThreadScore, "单线程分数为：");
-        map.put(LangConstant.round, "轮");
+        map.put(LangConstant.round, " 轮");
         map.put(LangConstant.multiThreadTotalExecute, "多线程共执行：");
         map.put(LangConstant.multiThreadScore, "多线程分数为：");
         map.put(LangConstant.total, "总共 ");

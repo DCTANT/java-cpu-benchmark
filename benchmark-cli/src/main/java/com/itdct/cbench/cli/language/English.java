@@ -23,10 +23,10 @@ public class English {
         map.put(LangConstant.inputWrong, "Invalid selection, please re-enter.");
         map.put(LangConstant.singleThreadTotalExecute, "Single thread executes: ");
         map.put(LangConstant.singleThreadScore, "Single thread score: ");
-        map.put(LangConstant.round, "rounds");
+        map.put(LangConstant.round, " rounds");
         map.put(LangConstant.multiThreadTotalExecute, "Multi threads execute: ");
         map.put(LangConstant.multiThreadScore, "Multi thread score: ");
-        map.put(LangConstant.total, "total ");
+        map.put(LangConstant.total, "Total ");
         map.put(LangConstant.coreParticipate, " cores participated calculate");
         map.put(LangConstant.coreRatio, "Multi thread ratio: ");
         map.put(LangConstant.startExecute, "Start execute the ");
