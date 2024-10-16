@@ -60,7 +60,7 @@ public class MainFrame extends JFrame {
         context = this;
         // 设置窗口默认关闭操作
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Java版CPU性能测试工具——By DecentAnt V" + versionName);
+        setTitle("jcpu-benchmark ——By DecentAnt V" + versionName);
 
         createMenuBar();
 

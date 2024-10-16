@@ -32,7 +32,7 @@
     </dependencies>
 
     <build>
-        <finalName>Java版CPU性能测试工具-${project.version}</finalName>
+        <finalName>jcpu-benchmark-ui-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -48,7 +48,6 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.itdct.cbench.ui.Main</mainClass>
-                                    <iconFile>${basedir}/src/main/resources/jcpu-benchmark.ico</iconFile>
                                 </transformer>
                             </transformers>
                         </configuration>

@@ -28,7 +28,7 @@
     </dependencies>
 
     <build>
-        <finalName>benchmark-native-${project.version}</finalName>
+        <finalName>jcpu-benchmark-native-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
