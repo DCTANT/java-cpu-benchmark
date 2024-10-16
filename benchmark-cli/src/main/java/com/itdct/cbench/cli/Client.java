@@ -35,45 +35,13 @@ public class Client {
         String input = new Scanner(System.in).nextLine().toUpperCase(Locale.ROOT);
         switch (input) {
             case "1":
-                // 测试CPU性能
-                Benchmark benchmark = new Benchmark();
-                benchmark.setOnPrint(originString -> {
-                    String result = originString;
-                    if (originString.startsWith("开始执行第")) {
-                        result = result.replace("开始执行第 ", Language.get(LangConstant.startExecute));
-                        result = result.replace("轮", Language.get(LangConstant.round));
-                        result = result.replace("，当前迭代次数为：", Language.get(LangConstant.nowIterationIs));
-                    } else if (originString.equals("开始执行单线程分数评估")) {
-                        result = Language.get(LangConstant.startSingleThreadEvaluate);
-                    }else if (originString.equals("开始执行多线程分数评估")) {
-                        result = Language.get(LangConstant.startMultiThreadEvaluate);
-                    } else if (originString.equals("单线程任务执行完成")) {
-                        result = Language.get(LangConstant.singleThreadExeFinish);
-                    }else if (originString.equals("多线程任务执行完成")) {
-                        result = Language.get(LangConstant.multiThreadExeFinish);
-                    }
-
-                    System.out.println(result);
-                });
-                CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
-                if (cpuBenchmarkResultModel == null) {
-                    return;
-                }
-                String cpuBenchmarkResult = CpuBenchmarkResultUtil.getCpuBenchmarkResult(cpuBenchmarkResultModel);
-                System.out.println(cpuBenchmarkResult);
+                cpuBenchmark();
                 break;
             case "2":
-                // 获取CPU信息
-                GetCpuInfo getCpuInfo = new GetCpuInfo();
-                CpuInfoModel cpuInfo = getCpuInfo.getCpuInfo();
-                System.out.println(CpuInfoResultUtil.getCpuInfoResult(cpuInfo));
+                getCpuInfo();
                 break;
             case "3":
-                if (Language.languageType == LangType.ENGLISH) {
-                    Language.languageType = LangType.CHINESE;
-                } else {
-                    Language.languageType = LangType.ENGLISH;
-                }
+                changeLanguage();
                 break;
             case "Q":
                 // 退出程序
@@ -82,6 +50,50 @@ public class Client {
             default:
                 System.out.println(Language.get("wrongInput"));
         }
+    }
+
+    private static void changeLanguage() {
+        if (Language.languageType == LangType.ENGLISH) {
+            Language.languageType = LangType.CHINESE;
+        } else {
+            Language.languageType = LangType.ENGLISH;
+        }
+    }
+
+    private static void getCpuInfo() {
+        // 获取CPU信息
+        GetCpuInfo getCpuInfo = new GetCpuInfo();
+        CpuInfoModel cpuInfo = getCpuInfo.getCpuInfo();
+        System.out.println(CpuInfoResultUtil.getCpuInfoResult(cpuInfo));
+    }
+
+    private static void cpuBenchmark() {
+        // 测试CPU性能
+        Benchmark benchmark = new Benchmark();
+        benchmark.setOnPrint(originString -> {
+            String result = originString;
+            if (originString.startsWith("开始执行第")) {
+                result = result.replace("开始执行第 ", Language.get(LangConstant.startExecute));
+                result = result.replace("轮", Language.get(LangConstant.round));
+                result = result.replace("，当前迭代次数为：", Language.get(LangConstant.nowIterationIs));
+            } else if (originString.equals("开始执行单线程分数评估")) {
+                result = Language.get(LangConstant.startSingleThreadEvaluate);
+            }else if (originString.equals("开始执行多线程分数评估")) {
+                result = Language.get(LangConstant.startMultiThreadEvaluate);
+            } else if (originString.equals("单线程任务执行完成")) {
+                result = Language.get(LangConstant.singleThreadExeFinish);
+            }else if (originString.equals("多线程任务执行完成")) {
+                result = Language.get(LangConstant.multiThreadExeFinish);
+            }
+
+            System.out.println(result);
+        });
+        CpuBenchmarkResultModel cpuBenchmarkResultModel = benchmark.benchmark();
+        if (cpuBenchmarkResultModel == null) {
+            return;
+        }
+        String cpuBenchmarkResult = CpuBenchmarkResultUtil.getCpuBenchmarkResult(cpuBenchmarkResultModel);
+        System.out.println(cpuBenchmarkResult);
     }
 
 }
