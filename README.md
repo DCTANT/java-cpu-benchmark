@@ -73,4 +73,22 @@ java -jar benchmark-cli*.jar
 |  红米3S(SD 430)   | 390.31 | 2127.60 |
 |    i7 8700K     | 2903.54 | 21985.10 |
 
+## 项目结构
+### [benchmark-cli](benchmark-cli)
+无界面命令行版本，最小的形式方式
 
+### [benchmark-core](benchmark-core)
+核心模块，包含CPU性能计算算法，获取CPU信息等
+
+### [benchmark-native](benchmark-native)
+对benchmark-cli采用native打包，可以在对应系统的服务器上直接运行，不需要JVM
+
+### [benchmark-report](benchmark-report)
+数据结果上报模块，目前还没开始制作，且为了服务器安全，和数据准确性，该模块不开源
+
+### [benchmark-ui](benchmark-ui)
+java swing制作的带GUI的图形化界面版本。目前使用Graalvm打包还有问题，执行会报错，目前还不清楚如何解决
+
+## 联系方式
+### 欢迎加入我的群聊
+![欢迎加入我的群聊](asset%2Fmy-group.jpg)
