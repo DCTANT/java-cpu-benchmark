@@ -1,4 +1,5 @@
 # Java版CPU性能测试工具
+![banner.jpg](asset%2Fbanner.jpg)
 ## **<font color='red'>全平台CPU同场竞技！</font>**
 
 ## 前言

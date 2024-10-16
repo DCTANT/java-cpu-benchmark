@@ -16,13 +16,18 @@ import com.itdct.cbench.ui.dialog.AboutDialog;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -77,6 +82,19 @@ public class MainFrame extends JFrame {
 
         // 添加按钮面板到主面板的 SOUTH 区域
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        InputStream is = MainFrame.class.getResourceAsStream("/jcpu-benchmark.png");
+        BufferedImage image = null; // 需要导入javax.imageio.ImageIO
+        try {
+            image = ImageIO.read(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+//        frame.setIconImage(image);
+//        Image icon = Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("jcpu-benchmark.ico"));
+
+        // 设置窗口图标
+        setIconImage(image);
 
         // 设置默认大小
         setSize(600, 400);

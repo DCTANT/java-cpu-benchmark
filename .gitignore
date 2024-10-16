@@ -39,3 +39,4 @@ build/
 .DS_Store
 /benchmark-cli/dependency-reduced-pom.xml
 /benchmark-ui/dependency-reduced-pom.xml
+/out/
