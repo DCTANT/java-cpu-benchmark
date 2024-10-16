@@ -2,6 +2,11 @@
 ![banner.jpg](asset%2Fbanner.jpg)
 ## **<font color='red'>全平台CPU同场竞技！</font>**
 
+🇨🇳：[中文](README.md)
+
+🇬🇧：[English](README.en.md)
+
+
 ## 前言
 该项目借鉴了SuperPI的CPU性能计算方式，通过多轮迭代估算出当前CPU的性能成绩。
 
@@ -28,7 +33,7 @@ mvn clean package
 
 * 执行cli版本jar包
 ```shell
-java -jar benchmark-cli*.jar
+java -jar jcpu-benchmark-cli-*.jar
 ```
 
 * 执行ui版本jar包
@@ -42,10 +47,10 @@ java -jar benchmark-cli*.jar
 输入：q，可退出程序
 
 ## TODOS
-* 尚未测试过MacOS
+* MACOS CPU信息无法获取
 * 增加结果提交功能（目前服务器还没搭建完成）
 * 软件更新提示
-* 软件图标logo/项目logo
+* Android APP版本，待开发
 
 ## CPU性能汇总（1.3版）
 |    CPU型号/手机型号     |  单核分数   |   多核分数   |
@@ -91,4 +96,6 @@ java swing制作的带GUI的图形化界面版本。目前使用Graalvm打包还
 
 ## 联系方式
 ### 欢迎加入我的群聊
+#### 群号：170618278
+没错，就是VMware虚拟机交流群，其实就是一个普通的技术吹水群罢了🤣
 ![欢迎加入我的群聊](asset%2Fmy-group.jpg)

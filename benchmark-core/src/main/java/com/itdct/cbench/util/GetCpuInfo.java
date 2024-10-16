@@ -17,29 +17,14 @@ public class GetCpuInfo {
     public CpuInfoModel getCpuInfo() {
         CpuInfoModel cpuInfoModel = new CpuInfoModel();
         String osName = System.getProperty("os.name").toLowerCase();
+        cpuInfoModel.setDeviceType(osName);
 //        System.out.println("当前系统名称为：" + osName);
 
         if (osName.contains("linux")) {
             String bashResult = getBashResult("uname -a");
             if (bashResult.endsWith("Android")) {
-                cpuInfoModel.setDeviceName(getBashResult("getprop ro.product.brand") + " " + getBashResult("getprop ro.product.model"));
-                String cpuInfo = getBashResult("cat /proc/cpuinfo");
-                if (cpuInfo != null && !cpuInfo.isEmpty()) {
-                    int processorNum = 0;
-                    for (String string : cpuInfo.split("\n")) {
-                        if (string.startsWith("processor")) {
-                            processorNum++;
-                        } else if (string.startsWith("Hardware")) {
-                            String cpuName = string.split(":")[1].trim();
-                            cpuInfoModel.setCpuModelName(cpuName);
-                        }
-                    }
-                    cpuInfoModel.setCpuCoreNum(processorNum);
-                }
-                if (cpuInfoModel.getCpuModelName() == null || cpuInfoModel.getCpuModelName().isEmpty()) {
-                    cpuInfoModel.setCpuModelName(getBashResult("getprop ro.soc.manufacturer") + " " + getBashResult("getprop ro.soc.model"));
-                }
-                cpuInfoModel.setCpuLogicalProcessorNum(getLogicProcessorNum());
+                // INFO: Zhouwx: 2024/10/16 由于Termux获取到的系统类型也是linux，因此需要单独判断是否是Android
+                setAndroidCpuInfo(cpuInfoModel);
             } else {
                 try {
                     cpuInfoModel.setCpuModelName(getLinuxCpuInfo("model name"));
@@ -60,6 +45,28 @@ public class GetCpuInfo {
         }
 
         return cpuInfoModel;
+    }
+
+    private void setAndroidCpuInfo(CpuInfoModel cpuInfoModel) {
+        cpuInfoModel.setDeviceType("Android");
+        cpuInfoModel.setDeviceName(getBashResult("getprop ro.product.brand") + " " + getBashResult("getprop ro.product.model"));
+        String cpuInfo = getBashResult("cat /proc/cpuinfo");
+        if (cpuInfo != null && !cpuInfo.isEmpty()) {
+            int processorNum = 0;
+            for (String string : cpuInfo.split("\n")) {
+                if (string.startsWith("processor")) {
+                    processorNum++;
+                } else if (string.startsWith("Hardware")) {
+                    String cpuName = string.split(":")[1].trim();
+                    cpuInfoModel.setCpuModelName(cpuName);
+                }
+            }
+            cpuInfoModel.setCpuCoreNum(processorNum);
+        }
+        if (cpuInfoModel.getCpuModelName() == null || cpuInfoModel.getCpuModelName().isEmpty()) {
+            cpuInfoModel.setCpuModelName(getBashResult("getprop ro.soc.manufacturer") + " " + getBashResult("getprop ro.soc.model"));
+        }
+        cpuInfoModel.setCpuLogicalProcessorNum(getLogicProcessorNum());
     }
 
     private static String getBashResult(String command) {

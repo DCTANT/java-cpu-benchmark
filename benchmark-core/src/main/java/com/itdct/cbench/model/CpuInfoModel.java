@@ -8,6 +8,11 @@ package com.itdct.cbench.model;
  */
 public class CpuInfoModel {
     /**
+     * 设备类型，Windows，Linux，Android还是MAC
+     */
+    private String deviceType;
+
+    /**
      * CPU名称
      */
     private String cpuModelName;
@@ -77,20 +82,12 @@ public class CpuInfoModel {
         return this;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("CPU信息：\n");
-        if (cpuModelName != null) {
-            stringBuilder.append("CPU型号：" + cpuModelName + "\n");
-        }
-        if (deviceName != null) {
-            stringBuilder.append("设备名称：" + deviceName + "\n");
-        }
-        stringBuilder.append("CPU核心数：" + cpuCoreNum + "\n");
-        stringBuilder.append("CPU逻辑处理器数：" + cpuLogicalProcessorNum + "\n");
-        stringBuilder.append("CPU基础主频：" + cpuFrequency + "MHz\n");
-        return stringBuilder.toString();
+    public String getDeviceType() {
+        return deviceType;
+    }
 
+    public CpuInfoModel setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+        return this;
     }
 }
